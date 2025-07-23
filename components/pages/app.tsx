@@ -3,6 +3,7 @@
 import { Demo } from '@/components/Home'
 import { useFrame } from '@/components/farcaster-provider'
 import { SafeAreaContainer } from '@/components/safe-area-container'
+import Navbar from '../Home/Navbar'
 
 export default function Home() {
   const { context, isLoading, isSDKLoaded } = useFrame()
@@ -31,6 +32,8 @@ export default function Home() {
 
   return (
     <SafeAreaContainer insets={context?.client.safeAreaInsets}>
+      <h1 className="text-3xl font-bold text-center">Harsh</h1>
+      <Navbar />
       <Demo />
     </SafeAreaContainer>
   )

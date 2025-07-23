@@ -30,7 +30,7 @@ export function FarcasterActions() {
               className="bg-white text-black rounded-md p-2 text-sm"
               onClick={() =>
                 actions?.composeCast({
-                  text: 'Check out this Monad Farcaster MiniApp Template!',
+                  text: 'Check out this Base Farcaster MiniApp Template!',
                   embeds: [`${APP_URL}`],
                 })
               }
@@ -40,7 +40,7 @@ export function FarcasterActions() {
             <button
               type="button"
               className="bg-white text-black rounded-md p-2 text-sm"
-              onClick={() => actions?.openUrl('https://docs.monad.xyz')}
+              onClick={() => actions?.openUrl('https://docs.base.org/')}
             >
               openUrl
             </button>
