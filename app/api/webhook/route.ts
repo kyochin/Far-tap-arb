@@ -46,37 +46,37 @@ import {
     const event = data.event;
   
     switch (event.event) {
-      case "frame_added":
-        if (event.notificationDetails) {
-          await setUserNotificationDetails(fid, event.notificationDetails);
-          await sendFrameNotification({
-            fid,
-            title: "Welcome to Frames v2",
-            body: "Frame is now added to your client",
-          });
-        } else {
-          await deleteUserNotificationDetails(fid);
-        }
-  
-        break;
-      case "frame_removed":
-        await deleteUserNotificationDetails(fid);
-  
-        break;
-      case "notifications_enabled":
-        await setUserNotificationDetails(fid, event.notificationDetails);
-        await sendFrameNotification({
-          fid,
-          title: "Ding ding ding",
-          body: "Notifications are now enabled",
-        });
-  
-        break;
-      case "notifications_disabled":
-        await deleteUserNotificationDetails(fid);
-  
-        break;
+  switch (event.event) {
+  case "miniapp_added":
+    if (event.notificationDetails) {
+      await setUserNotificationDetails(fid, event.notificationDetails);
+      await sendFrameNotification({
+        fid,
+        title: "Welcome!",
+        body: "Miniapp has been added to your client.",
+      });
+    } else {
+      await deleteUserNotificationDetails(fid);
     }
-  
-    return Response.json({ success: true });
-  }
+    break;
+
+  case "miniapp_removed":
+    await deleteUserNotificationDetails(fid);
+    break;
+
+  case "notifications_enabled":
+    await sendFrameNotification({
+      fid,
+      title: "Notifications Enabled",
+      body: "You will now receive updates.",
+    });
+    break;
+
+  case "notifications_disabled":
+    await sendFrameNotification({
+      fid,
+      title: "Notifications Disabled",
+      body: "You will no longer receive updates.",
+    });
+    break;
+}
