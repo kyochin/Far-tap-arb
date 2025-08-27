@@ -1,0 +1,10 @@
+{
+  "name": "Far Tap ARB",
+  "description": "A fast tapping mini game on Arbitrum with daily check-ins, leaderboard, and rewards.",
+  "icon": "https://far-tap-arb.vercel.app/icon.png",
+  "url": "https://far-tap-arb.vercel.app",
+  "screenshots": [
+    "https://far-tap-arb.vercel.app/screenshot1.png"
+  ],
+  "frame": "https://far-tap-arb.vercel.app/api/frame"
+}
