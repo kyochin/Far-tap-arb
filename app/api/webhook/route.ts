@@ -1,82 +1,31 @@
-import {
-    ParseWebhookEvent,
-    parseWebhookEvent,
-    verifyAppKeyWithNeynar,
-  } from "@farcaster/miniapp-node";
-  import { NextRequest } from "next/server";
-  import {
-    deleteUserNotificationDetails,
-    setUserNotificationDetails,
-  } from "@/lib/kv";
-  import { sendFrameNotification } from "@/lib/notifs";
-  
-  export async function POST(request: NextRequest) {
-    const requestJson = await request.json();
-  
-    let data;
-    try {
-      data = await parseWebhookEvent(requestJson, verifyAppKeyWithNeynar);
-    } catch (e: unknown) {
-      const error = e as ParseWebhookEvent.ErrorType;
-  
-      switch (error.name) {
-        case "VerifyJsonFarcasterSignature.InvalidDataError":
-        case "VerifyJsonFarcasterSignature.InvalidEventDataError":
-          // The request data is invalid
-          return Response.json(
-            { success: false, error: error.message },
-            { status: 400 }
-          );
-        case "VerifyJsonFarcasterSignature.InvalidAppKeyError":
-          // The app key is invalid
-          return Response.json(
-            { success: false, error: error.message },
-            { status: 401 }
-          );
-        case "VerifyJsonFarcasterSignature.VerifyAppKeyError":
-          // Internal error verifying the app key (caller may want to try again)
-          return Response.json(
-            { success: false, error: error.message },
-            { status: 500 }
-          );
-      }
-    }
-  
+export async function POST(request: NextRequest) {
+  try {
+    const data = await request.json();
     const fid = data.fid;
     const event = data.event;
-  
+
     switch (event.event) {
-  switch (event.event) {
-  case "miniapp_added":
-    if (event.notificationDetails) {
-      await setUserNotificationDetails(fid, event.notificationDetails);
-      await sendFrameNotification({
-        fid,
-        title: "Welcome!",
-        body: "Miniapp has been added to your client.",
-      });
-    } else {
-      await deleteUserNotificationDetails(fid);
+      case "miniapp_added":
+        if (event.notificationDetails) {
+          await setUserNotificationDetails(fid, event.notificationDetails);
+        }
+        break;
+
+      // 👉 dito pwede ka magdagdag ng iba pang cases
+      // case "miniapp_removed":
+      //   ...
+      //   break;
+
+      default:
+        break;
     }
-    break;
 
-  case "miniapp_removed":
-    await deleteUserNotificationDetails(fid);
-    break;
-
-  case "notifications_enabled":
-    await sendFrameNotification({
-      fid,
-      title: "Notifications Enabled",
-      body: "You will now receive updates.",
-    });
-    break;
-
-  case "notifications_disabled":
-    await sendFrameNotification({
-      fid,
-      title: "Notifications Disabled",
-      body: "You will no longer receive updates.",
-    });
-    break;
+    return Response.json({ success: true });
+  } catch (error: any) {
+    console.error("Webhook error:", error);
+    return Response.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
+  }
 }
